@@ -21,34 +21,35 @@ export class App extends Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    localStorage.setItem('contact', JSON.stringify(this.state.contacts));
+    
+    if (JSON.stringify(this.state.contacts) !== '') {
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts));
+    }
   }
   checkNewName = newName => {
-    if (this.state.contacts) {
+    
     return this.state.contacts.find(
       ({ name }) => name.toLowerCase() === newName.toLowerCase()
-    );}
-    else {
-      alert(`Empty`);
-      return true
-    }
+    );
   };
 
   addContact = ({ name, number }) => {
-    if (!this.checkNewName(name)) {
-      const nameId = nanoid();
-      const contact = {
-        id: nameId,
-        name,
-        number,
-      };
-      this.setState(({ contacts }) => ({
-        contacts: [...contacts, contact],
-      }));
-    } else {
-      alert(`${name} is already in contacts!`);
-    }
-  };
+    if ( name  !== '' && number!== '') {
+      if (!this.checkNewName(name)) {
+        const nameId = nanoid();
+        const contact = {
+          id: nameId,
+          name,
+          number,
+        };
+        this.setState(({ contacts }) => ({
+          contacts: [...contacts, contact],
+        }));
+      } else {
+        alert(`${name} is already in contacts!`);
+      }
+    } else { alert(`${name} is EMPTY! Please enter valid name or number`); };
+  } 
   removeContact = id => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== id),
